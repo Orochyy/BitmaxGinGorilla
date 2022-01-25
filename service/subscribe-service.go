@@ -9,8 +9,8 @@ import (
 )
 
 type SubscribeService interface {
-	//Create
-	//Delete
+	Create(s dto.Subsription) entity.Subsribe
+	Delete(s dto.Subsription)
 }
 
 type subscribeService struct {
