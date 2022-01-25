@@ -2,7 +2,7 @@ package migrations
 
 import (
 	"BitmaxGinGorilla/config"
-	"GinApiGormMysqlElif/entity"
+	"BitmaxGinGorilla/entity"
 	"gorm.io/gorm"
 )
 
