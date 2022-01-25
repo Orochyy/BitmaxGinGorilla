@@ -9,7 +9,6 @@ import (
 	"log"
 )
 
-//AuthService is a contract about something that this service can do
 type AuthService interface {
 	VerifyCredential(email string, password string) interface{}
 	CreateUser(user dto.RegisterDTO) entity.User
@@ -21,7 +20,6 @@ type authService struct {
 	userRepository repository.UserRepository
 }
 
-//NewAuthService creates a new instance of AuthService
 func NewAuthService(userRep repository.UserRepository) AuthService {
 	return &authService{
 		userRepository: userRep,

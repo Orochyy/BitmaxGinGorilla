@@ -10,7 +10,6 @@ import (
 	"strconv"
 )
 
-//AuthController interface is a contract what this controller can do
 type AuthController interface {
 	Login(ctx *gin.Context)
 	Register(ctx *gin.Context)
@@ -21,7 +20,6 @@ type authController struct {
 	jwtService  service.JWTService
 }
 
-//NewAuthController creates a new instance of AuthController
 func NewAuthController(authService service.AuthService, jwtService service.JWTService) AuthController {
 	return &authController{
 		authService: authService,

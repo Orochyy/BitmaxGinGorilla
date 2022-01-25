@@ -8,7 +8,6 @@ import (
 	"log"
 )
 
-//UserService is a contract.....
 type UserService interface {
 	Update(user dto.UserUpdateDTO) entity.User
 	Profile(userID string) entity.User
@@ -18,7 +17,6 @@ type userService struct {
 	userRepository repository.UserRepository
 }
 
-//NewUserService creates a new instance of UserService
 func NewUserService(userRepo repository.UserRepository) UserService {
 	return &userService{
 		userRepository: userRepo,

@@ -11,7 +11,6 @@ import (
 	"strconv"
 )
 
-//UserController is a ....
 type UserController interface {
 	Update(context *gin.Context)
 	Profile(context *gin.Context)
@@ -22,7 +21,6 @@ type userController struct {
 	jwtService  service.JWTService
 }
 
-//NewUserController is creating anew instance of UserControlller
 func NewUserController(userService service.UserService, jwtService service.JWTService) UserController {
 	return &userController{
 		userService: userService,

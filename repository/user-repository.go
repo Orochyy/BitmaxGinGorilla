@@ -7,7 +7,6 @@ import (
 	"log"
 )
 
-//UserRepository is contract what userRepository can do to db
 type UserRepository interface {
 	InsertUser(user entity.User) entity.User
 	UpdateUser(user entity.User) entity.User
@@ -21,7 +20,6 @@ type userConnection struct {
 	connection *gorm.DB
 }
 
-//NewUserRepository is creates a new instance of UserRepository
 func NewUserRepository(db *gorm.DB) UserRepository {
 	return &userConnection{
 		connection: db,
