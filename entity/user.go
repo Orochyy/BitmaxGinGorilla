@@ -8,5 +8,3 @@ type User struct {
 	Token    string      `gorm:"-" json:"token,omitempty"`
 	Subsribe *[]Subsribe `json:"subscribe,omitempty"`
 }
-
-//
