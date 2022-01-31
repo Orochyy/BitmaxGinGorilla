@@ -10,4 +10,5 @@ var db *gorm.DB = config.SetupDatabaseConnection()
 
 func DbMigrate() {
 	db.AutoMigrate(&entity.User{})
+	db.AutoMigrate(&entity.Subsсribe{})
 }
