@@ -15,14 +15,17 @@ import (
 )
 
 var (
-	db             *gorm.DB                  = config.SetupDatabaseConnection()
-	userRepository repository.UserRepository = repository.NewUserRepository(db)
-	jwtService     service.JWTService        = service.NewJWTService()
-	userService    service.UserService       = service.NewUserService(userRepository)
-	authService    service.AuthService       = service.NewAuthService(userRepository)
-	authController controller.AuthController = controller.NewAuthController(authService, jwtService)
-	userController controller.UserController = controller.NewUserController(userService, jwtService)
-	Migrations                               = migrations.DbMigrate
+	db             *gorm.DB                       = config.SetupDatabaseConnection()
+	userRepository repository.UserRepository      = repository.NewUserRepository(db)
+	subRepository  repository.SubscribeRepository = repository.NewSubRepository(db)
+	jwtService     service.JWTService             = service.NewJWTService()
+	userService    service.UserService            = service.NewUserService(userRepository)
+	subService     service.SubscribeService       = service.NewSubService(subRepository)
+	authService    service.AuthService            = service.NewAuthService(userRepository)
+	authController controller.AuthController      = controller.NewAuthController(authService, jwtService)
+	userController controller.UserController      = controller.NewUserController(userService, jwtService)
+	subController  controller.SubscribeController = controller.NewSubController(subService, jwtService)
+	Migrations                                    = migrations.DbMigrate
 )
 
 func main() {
