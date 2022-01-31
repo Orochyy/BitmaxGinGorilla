@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"BitmaxGinGorilla/dto"
 	"BitmaxGinGorilla/entity"
 	"BitmaxGinGorilla/helper"
 	"BitmaxGinGorilla/service"
@@ -18,6 +19,32 @@ type SubscribeController interface {
 type subscribeController struct {
 	subscribeService service.SubscribeService
 	jwtService       service.JWTService
+}
+
+func NewSubController(subServ service.SubscribeService, jwtServ service.JWTService) SubscribeController {
+	return &subscribeController{
+		subscribeService: subServ,
+		jwtService:       jwtServ,
+	}
+}
+
+func (c *subscribeController) Insert(context *gin.Context) {
+	var subCreateDTO dto.Subscribe
+	errDTO := context.ShouldBind(&subCreateDTO)
+	if errDTO != nil {
+		res := helper.BuildErrorResponse("Failed to process request", errDTO.Error(), helper.EmptyObj{})
+		context.JSON(http.StatusBadRequest, res)
+	} else {
+		authHeader := context.GetHeader("Authorization")
+		userID := c.getUserIDByToken(authHeader)
+		convertedUserID, err := strconv.ParseUint(userID, 10, 64)
+		if err == nil {
+			subCreateDTO.UserID = convertedUserID
+		}
+		result := c.subscribeService.Create(subCreateDTO)
+		response := helper.BuildResponse(true, "OK", result)
+		context.JSON(http.StatusCreated, response)
+	}
 }
 
 func (c *subscribeController) Delete(context *gin.Context) {
@@ -43,4 +70,14 @@ func (c *subscribeController) Delete(context *gin.Context) {
 		response := helper.BuildErrorResponse("You dont have permission", "You are not the owner", helper.EmptyObj{})
 		context.JSON(http.StatusForbidden, response)
 	}
+}
+
+func (c *subscribeController) getUserIDByToken(token string) string {
+	aToken, err := c.jwtService.ValidateToken(token)
+	if err != nil {
+		panic(err.Error())
+	}
+	claims := aToken.Claims.(jwt.MapClaims)
+	id := fmt.Sprintf("%v", claims["user_id"])
+	return id
 }
