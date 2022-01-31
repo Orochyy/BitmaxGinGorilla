@@ -15,6 +15,12 @@ type subscribeConnection struct {
 	connection *gorm.DB
 }
 
+func NewSubRepository(dbConn *gorm.DB) SubscribeRepository {
+	return &subscribeConnection{
+		connection: dbConn,
+	}
+}
+
 func (db *subscribeConnection) CreateSubscribe(s entity.Subsсribe) entity.Subsсribe {
 	db.connection.Save(&s)
 	db.connection.Preload("User").Find(&s)
