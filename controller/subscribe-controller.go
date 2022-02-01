@@ -13,6 +13,7 @@ import (
 )
 
 type SubscribeController interface {
+	Insert(context *gin.Context)
 	Delete(context *gin.Context)
 }
 
