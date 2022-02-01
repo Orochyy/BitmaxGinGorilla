@@ -50,6 +50,8 @@ func main() {
 	{
 		userRoutes.GET("/profile", userController.Profile)
 		userRoutes.PUT("/profile", userController.Update)
+		userRoutes.POST("/subscribe", subController.Insert)
+		userRoutes.DELETE("/unsubscribe", subController.Delete)
 	}
 
 	go Migrations()
