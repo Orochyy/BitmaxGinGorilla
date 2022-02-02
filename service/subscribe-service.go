@@ -10,7 +10,7 @@ import (
 )
 
 type SubscribeService interface {
-	Create(s dto.Subscribe) entity.Subsсribe
+	Create(s dto.SubCreateDTO) entity.Subsсribe
 	Delete(s entity.Subsсribe)
 	IsAllowedToEdit(userID string, subID uint64) bool
 }
@@ -25,7 +25,7 @@ func NewSubService(subscribeRepo repository.SubscribeRepository) SubscribeServic
 	}
 }
 
-func (service *subscribeService) Create(s dto.Subscribe) entity.Subsсribe {
+func (service *subscribeService) Create(s dto.SubCreateDTO) entity.Subsсribe {
 	subscribe := entity.Subsсribe{}
 	err := smapping.FillStruct(&subscribe, smapping.MapFields(&s))
 	if err != nil {
