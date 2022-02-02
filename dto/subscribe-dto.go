@@ -5,3 +5,8 @@ type Subscribe struct {
 	Response bool   `json:"response" form:"response" binding:"required"`
 	UserID   uint64 `json:"user_id,omitempty"  form:"user_id,omitempty"`
 }
+
+type SubCreateDTO struct {
+	Response bool   `json:"response" form:"response" binding:"required"`
+	UserID   uint64 `json:"user_id,omitempty"  form:"user_id,omitempty"`
+}
