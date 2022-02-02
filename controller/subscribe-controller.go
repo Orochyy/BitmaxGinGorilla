@@ -30,7 +30,7 @@ func NewSubController(subServ service.SubscribeService, jwtServ service.JWTServi
 }
 
 func (c *subscribeController) Insert(context *gin.Context) {
-	var subCreateDTO dto.Subscribe
+	var subCreateDTO dto.SubCreateDTO
 	errDTO := context.ShouldBind(&subCreateDTO)
 	if errDTO != nil {
 		res := helper.BuildErrorResponse("Failed to process request", errDTO.Error(), helper.EmptyObj{})
