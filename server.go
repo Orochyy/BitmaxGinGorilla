@@ -30,6 +30,7 @@ var (
 
 func main() {
 	defer config.CloseDatabaseConnection(db)
+	//id := db.Raw("SELECT id FROM subscribes WHERE id= ?", 1)
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
@@ -50,6 +51,7 @@ func main() {
 	{
 		userRoutes.GET("/profile", userController.Profile)
 		userRoutes.PUT("/profile", userController.Update)
+		//if id != nil
 		userRoutes.POST("/subscribe", subController.Insert)
 		userRoutes.DELETE("/unsubscribe/:id", subController.Delete)
 	}
@@ -57,4 +59,5 @@ func main() {
 	go Migrations()
 
 	r.Run(":8080")
+
 }
