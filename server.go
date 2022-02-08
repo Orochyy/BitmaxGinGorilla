@@ -59,4 +59,5 @@ func main() {
 	go Migrations()
 
 	r.Run(":8080")
+
 }
