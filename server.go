@@ -51,7 +51,6 @@ func main() {
 	{
 		userRoutes.GET("/profile", userController.Profile)
 		userRoutes.PUT("/profile", userController.Update)
-		//if id != nil
 		userRoutes.POST("/subscribe", subController.Insert)
 		userRoutes.DELETE("/unsubscribe/:id", subController.Delete)
 	}
