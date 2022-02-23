@@ -7,7 +7,9 @@ import (
 	"BitmaxGinGorilla/migrations"
 	"BitmaxGinGorilla/repository"
 	"BitmaxGinGorilla/service"
+	"fmt"
 	"github.com/gorilla/websocket"
+	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -33,9 +35,24 @@ var wsupgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
+func wshandler(w http.ResponseWriter, r *http.Request) {
+	conn, err := wsupgrader.Upgrade(w, r, nil)
+	if err != nil {
+		fmt.Println("Failed to set websocket upgrade: %+v", err)
+		return
+	}
+
+	for {
+		t, msg, err := conn.ReadMessage()
+		if err != nil {
+			break
+		}
+		conn.WriteMessage(t, msg)
+	}
+}
+
 func main() {
 	defer config.CloseDatabaseConnection(db)
-	//id := db.Raw("SELECT id FROM subscribes WHERE id= ?", 1)
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
