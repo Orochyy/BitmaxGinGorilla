@@ -7,6 +7,7 @@ import (
 	"BitmaxGinGorilla/migrations"
 	"BitmaxGinGorilla/repository"
 	"BitmaxGinGorilla/service"
+	"github.com/gorilla/websocket"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -27,6 +28,10 @@ var (
 	subController  controller.SubscribeController = controller.NewSubController(subService, jwtService)
 	Migrations                                    = migrations.DbMigrate
 )
+var wsupgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+}
 
 func main() {
 	defer config.CloseDatabaseConnection(db)
