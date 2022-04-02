@@ -9,7 +9,10 @@ import (
 	"BitmaxGinGorilla/service"
 	"fmt"
 	"github.com/gorilla/websocket"
+	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -80,4 +83,30 @@ func main() {
 	go Migrations()
 
 	r.Run(":8080")
+}
+
+func bitmex() {
+	req, err := http.NewRequest(
+		http.MethodGet,
+		"https://testnet.bitmex.com/api/explorer",
+		nil,
+	)
+	if err != nil {
+		log.Fatalf("error creating HTTP request: %v", err)
+	}
+
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("apiKey", os.Getenv("API_KEY"))
+	req.Header.Add("apiSecret", os.Getenv("API_SECRET"))
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Fatalf("error sending HTTP request: %v", err)
+	}
+	responseBytes, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatalf("error reading HTTP response body: %v", err)
+	}
+
+	log.Println("We got the response:", string(responseBytes))
 }
