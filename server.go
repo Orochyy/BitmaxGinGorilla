@@ -7,16 +7,15 @@ import (
 	"BitmaxGinGorilla/migrations"
 	"BitmaxGinGorilla/repository"
 	"BitmaxGinGorilla/service"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
-	"github.com/gorilla/websocket"
-	"io/ioutil"
-	"log"
-	"net/http"
-	"os"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 	"gorm.io/gorm"
+	"net/http"
 	"time"
 )
 
@@ -81,32 +80,44 @@ func main() {
 	}
 
 	go Migrations()
+	go bitmex()
 
 	r.Run(":8080")
 }
 
 func bitmex() {
-	req, err := http.NewRequest(
-		http.MethodGet,
-		"https://testnet.bitmex.com/api/explorer",
-		nil,
-	)
-	if err != nil {
-		log.Fatalf("error creating HTTP request: %v", err)
-	}
+	verb := "GET"
+	path := "/api/v1/instrument"
+	expires := fmt.Sprint(time.Now().Local().Add(time.Minute * time.Duration(10)).Unix())
+	var secret = "mvK7p-zYF5He2eistXxXUvASoJWRGvp6eOO5TF2gn4BHI2iB"
+	//req, err := http.NewRequest(
+	//	http.MethodGet,
+	//	"https://testnet.bitmex.com/api/explorer",
+	//	nil,
+	//)
+	//if err != nil {
+	//	log.Fatalf("error creating HTTP request: %v", err)
+	//}
+	//
+	//req.Header.Add("Accept", "application/json")
+	//req.Header.Add("apiKey", os.Getenv("API_KEY"))
+	//req.Header.Add("apiSecret", os.Getenv("API_SECRET"))
+	//
+	//res, err := http.DefaultClient.Do(req)
+	//if err != nil {
+	//	log.Fatalf("error sending HTTP request: %v", err)
+	//}
+	//responseBytes, err := ioutil.ReadAll(res.Body)
+	//if err != nil {
+	//	log.Fatalf("error reading HTTP response body: %v", err)
+	//}
+	//
+	//log.Println("We got the response:", string(responseBytes))
 
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("apiKey", os.Getenv("API_KEY"))
-	req.Header.Add("apiSecret", os.Getenv("API_SECRET"))
+	signature := hmac.New(sha256.New, []byte(secret))
+	data := verb + path + expires
+	signature.Write([]byte(data))
+	sha := hex.EncodeToString(signature.Sum(nil))
+	fmt.Println(sha)
 
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		log.Fatalf("error sending HTTP request: %v", err)
-	}
-	responseBytes, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatalf("error reading HTTP response body: %v", err)
-	}
-
-	log.Println("We got the response:", string(responseBytes))
 }
