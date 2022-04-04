@@ -93,8 +93,6 @@ func main() {
 
 	go Migrations()
 
-	//go bitmexInstrument()
-
 	r.Run(":8080")
 }
 
