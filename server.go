@@ -110,10 +110,6 @@ func bitmexInstrument() {
 		log.Fatalf("error creating HTTP request: %v", err)
 	}
 
-	//req.Header.Add("Accept", "application/json")
-	//req.Header.Add("apiKey", os.Getenv("API_KEY"))
-	//req.Header.Add("apiSecret", os.Getenv("API_SECRET"))
-
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		log.Fatalf("error sending HTTP request: %v", err)
