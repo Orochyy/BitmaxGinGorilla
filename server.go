@@ -74,19 +74,19 @@ func main() {
 		userRoutes.PUT("/profile", userController.Update)
 		userRoutes.POST("/subscribe", subController.Insert)
 		userRoutes.DELETE("/unsubscribe/:id", subController.Delete)
-	}
-	r.LoadHTMLGlob("template/*")
-	{
-		r.GET("/template", func(c *gin.Context) {
-			c.HTML(
-				http.StatusOK,
-				"index.html",
-				gin.H{
-					"title": "Home Page",
-				},
-			)
+		r.LoadHTMLGlob("templates/*")
+		{
+			r.GET("/templates", func(c *gin.Context) {
+				c.HTML(
+					http.StatusOK,
+					"index.html",
+					gin.H{
+						"title": "Home Page",
+					},
+				)
 
-		})
+			})
+		}
 	}
 
 	go Migrations()
