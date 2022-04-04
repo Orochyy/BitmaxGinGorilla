@@ -12,8 +12,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"gorm.io/gorm"
-	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -101,25 +99,6 @@ func bitmexInstrument() {
 	//path := "/api/v1/instrument"
 	//expires := fmt.Sprint(time.Now().Local().Add(time.Minute * time.Duration(10)).Unix())
 	//var secret = "mvK7p-zYF5He2eistXxXUvASoJWRGvp6eOO5TF2gn4BHI2iB"
-	req, err := http.NewRequest(
-		http.MethodGet,
-		"https://testnet.bitmex.com/api/v1/instrument",
-		nil,
-	)
-	if err != nil {
-		log.Fatalf("error creating HTTP request: %v", err)
-	}
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		log.Fatalf("error sending HTTP request: %v", err)
-	}
-	responseBytes, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatalf("error reading HTTP response body: %v", err)
-	}
-
-	log.Println("We got the response:", string(responseBytes))
 
 	//signature := hmac.New(sha256.New, []byte(secret))
 	//data := verb + path + expires
