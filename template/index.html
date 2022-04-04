@@ -6,9 +6,6 @@
 </head>
 <body>
 
-<input type="text" id="input">
-<button id="sendMessage" onclick="sendMessage()">SendMessage</button>
-<br>
 <div>
     <input type="checkbox" name="announcement" onclick="manegeSubscribe(this)">
     <label>announcement</label>
@@ -124,17 +121,13 @@
         console.log(`[error] ${error.message}`);
     };
 
-    function sendMessage() {
-        let inputValue = document.getElementById("input").value;
-        socket.send(inputValue);
-    }
 
     function manegeSubscribe(e) {
-        let action = e.checked ? "subscribe" : "unsubscribe" ;
-        let topic = e.name  ;
-        let payload ;
+        let action = e.checked ? "subscribe" : "unsubscribe";
+        let topic = e.name;
+        let payload;
         payload = {"op": action, "args": [topic]}
-        let payloadStr = JSON.stringify(payload)
+        let payloadStr = JSON.stringify(payload);
         socket.send(payloadStr)
     }
 </script>
