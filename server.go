@@ -53,6 +53,7 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	defer config.CloseDatabaseConnection(db)
 	r := gin.Default()
+	r.LoadHTMLGlob("templates/*")
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"},
@@ -74,20 +75,30 @@ func main() {
 		userRoutes.PUT("/profile", userController.Update)
 		userRoutes.POST("/subscribe", subController.Insert)
 		userRoutes.DELETE("/unsubscribe/:id", subController.Delete)
-		r.LoadHTMLGlob("templates/*")
-		{
-			r.GET("/templates", func(c *gin.Context) {
-				c.HTML(
-					http.StatusOK,
-					"index.html",
-					gin.H{
-						"title": "Home Page",
-					},
-				)
+		userRoutes.GET("/main", func(c *gin.Context) {
+			c.HTML(
+				http.StatusOK,
+				"index.html",
+				gin.H{
+					"title": "Home Page",
+				},
+			)
 
-			})
-		}
+		})
 	}
+	//r.LoadHTMLGlob("templates/*")
+	//{
+	//	r.GET("/main", func(c *gin.Context) {
+	//		c.HTML(
+	//			http.StatusOK,
+	//			"index.html",
+	//			gin.H{
+	//				"title": "Home Page",
+	//			},
+	//		)
+	//
+	//	})
+	//}
 
 	go Migrations()
 
@@ -105,5 +116,9 @@ func bitmexInstrument() {
 	//signature.Write([]byte(data))
 	//sha := hex.EncodeToString(signature.Sum(nil))
 	//fmt.Println(sha)
-
 }
+
+//func WsHandler() {
+//	r := gin.Default()
+//	r.LoadHTMLGlob("templates/*")
+//}
