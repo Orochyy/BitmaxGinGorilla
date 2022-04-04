@@ -66,6 +66,15 @@ func main() {
 	authRoutes := r.Group("api/auth")
 	{
 		authRoutes.POST("/login", authController.Login)
+		authRoutes.GET("/login", func(c *gin.Context) {
+			c.HTML(
+				http.StatusOK,
+				"login.html",
+				gin.H{
+					"title": "Login",
+				},
+			)
+		})
 		authRoutes.POST("/register", authController.Register)
 	}
 
@@ -83,7 +92,6 @@ func main() {
 					"title": "Home Page",
 				},
 			)
-
 		})
 	}
 	//r.LoadHTMLGlob("templates/*")

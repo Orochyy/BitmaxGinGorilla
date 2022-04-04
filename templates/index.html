@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
 <div>
     <input type="checkbox" name="announcement" onclick="manegeSubscribe(this)">
     <label>announcement</label>
@@ -94,10 +86,14 @@
     <input type="checkbox" name="tradeBin1d" onclick="manegeSubscribe(this)">
     <label>tradeBin1d</label>
 </div>
-
+<p id="tmp"></p>
 </body>
 
 <script>
+
+    if (localStorage.getItem("token") === null) {
+        window.location.href = 'http://127.0.0.1:8080/api/auth/login';
+    }
     let socket = new WebSocket("wss://ws.testnet.bitmex.com/realtime");
 
     socket.onopen = function (e) {
@@ -107,6 +103,7 @@
 
     socket.onmessage = function (event) {
         console.log(`[message] Data received from server: ${event.data}`);
+        document.getElementById('tmp').textContent = `[message] Data received from server: ${event.data}`;
     };
 
     socket.onclose = function (event) {
@@ -130,5 +127,19 @@
         let payloadStr = JSON.stringify(payload);
         socket.send(payloadStr)
     }
+
+
+    setInterval(function (){
+        let token = localStorage.getItem("token");
+        let result = checkToken(token);
+        if (!result){
+            window.location.href = 'http://127.0.0.1:8080/api/auth/login';
+        }
+    },2000)
+
+    function checkToken(token){
+        // need create request for valid token to back-end
+        // var token
+        return true;
+    }
 </script>
-</html>
