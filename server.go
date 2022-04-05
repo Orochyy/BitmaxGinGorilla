@@ -7,10 +7,8 @@ import (
 	"BitmaxGinGorilla/migrations"
 	"BitmaxGinGorilla/repository"
 	"BitmaxGinGorilla/service"
-	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
 	"gorm.io/gorm"
 	"net/http"
 	"time"
@@ -29,26 +27,6 @@ var (
 	subController  controller.SubscribeController = controller.NewSubController(subService, jwtService)
 	Migrations                                    = migrations.DbMigrate
 )
-var wsupgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-}
-
-func wshandler(w http.ResponseWriter, r *http.Request) {
-	conn, err := wsupgrader.Upgrade(w, r, nil)
-	if err != nil {
-		fmt.Println("Failed to set websocket upgrade: %+v", err)
-		return
-	}
-
-	for {
-		t, msg, err := conn.ReadMessage()
-		if err != nil {
-			break
-		}
-		conn.WriteMessage(t, msg)
-	}
-}
 
 func main() {
 	defer config.CloseDatabaseConnection(db)
@@ -94,19 +72,17 @@ func main() {
 			)
 		})
 	}
-	//r.LoadHTMLGlob("templates/*")
-	//{
-	//	r.GET("/main", func(c *gin.Context) {
-	//		c.HTML(
-	//			http.StatusOK,
-	//			"index.html",
-	//			gin.H{
-	//				"title": "Home Page",
-	//			},
-	//		)
-	//
-	//	})
-	//}
+
+	r.GET("/main", func(c *gin.Context) {
+		c.HTML(
+			http.StatusOK,
+			"index.html",
+			gin.H{
+				"title": "Home Page",
+			},
+		)
+
+	})
 
 	go Migrations()
 
